@@ -3,7 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use App\Facades\Supabase;
 
-Route::view('/', 'welcome');
+// Laravel welcome page
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// React SPA routes
+Route::get('/app/{path?}', function () {
+    return view('app');
+})->where('path', '.*')->name('react');
+
+// Redirect lessons route to React app
+Route::redirect('/lessons', '/app/lessons');
 
 Route::get('/supabase-test', function () {
     try {
@@ -337,5 +348,8 @@ Route::get('/check-project', function () {
         ];
     }
 });
+
+// Route for lessons management
+Route::resource('lessons', \App\Http\Controllers\LessonController::class);
 
 require __DIR__.'/auth.php';
